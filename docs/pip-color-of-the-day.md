@@ -6,15 +6,15 @@ Renders a 9:16 "Color of the Day" Short for the Pip Lessons for English channel:
 
 ```bash
 make setup
-.venv/bin/python scripts/pip_music.py projects/pip/music/pip-theme.wav --seconds 13
-.venv/bin/python scripts/pip_color_of_the_day.py red apple "fire truck" strawberry --music projects/pip/music/pip-theme.wav
+
+.venv/bin/python scripts/pip_color_of_the_day.py red apple "fire truck" strawberry --theme-music
 ```
 
 The video lands in `projects/pip/renders/color-of-the-day-<color>.mp4`.
 
 - Colors: red, blue, yellow, green, orange, purple, pink, brown
 - Objects: apple, strawberry, fire truck, car, balloon, heart, ball, star, flower, whale, fish, banana, leaf, umbrella, sun
-- `--no-voice` skips narration, `--music <file>` adds a background track, `--output <path>` changes where the mp4 goes
+- `--no-voice` skips narration, `--theme-music` composes the Pip theme to fit the episode, `--music <file>` uses your own track, `--output <path>` changes where the mp4 goes
 
 Narration uses the free offline Piper voice (`en_US-lessac-medium`, downloaded on first run), pitched up for Pip. `pip_music.py` synthesizes an original ukulele and glockenspiel loop, so there is nothing to license.
 

@@ -1,7 +1,8 @@
 """Render a "Color of the Day" Short for the Pip Lessons for English channel.
 
     python scripts/pip_color_of_the_day.py red apple "fire truck" strawberry
-    python scripts/pip_color_of_the_day.py blue whale car balloon --no-voice
+    python scripts/pip_color_of_the_day.py blue whale car balloon --theme-music
+    python scripts/pip_color_of_the_day.py green leaf apple --no-voice
 """
 
 from __future__ import annotations
@@ -22,7 +23,7 @@ FPS = 30
 COLORS = {
     "red": {"color": "#E53935", "dark": "#B71C1C", "light": "#FFCDD2", "background": "#FDEDED"},
     "blue": {"color": "#1E88E5", "dark": "#1565C0", "light": "#BBDEFB", "background": "#E6F0FB"},
-    "yellow": {"color": "#FBC02D", "dark": "#F57F17", "light": "#FFF59D", "background": "#FFF8E1"},
+    "yellow": {"color": "#FBC02D", "dark": "#F57F17", "light": "#FFF59D", "background": "#FFF8E1", "labelText": "#5D4037"},
     "green": {"color": "#43A047", "dark": "#2E7D32", "light": "#C8E6C9", "background": "#EAF6EA"},
     "orange": {"color": "#FB8C00", "dark": "#E65100", "light": "#FFE0B2", "background": "#FFF2E3"},
     "purple": {"color": "#8E24AA", "dark": "#6A1B9A", "light": "#E1BEE7", "background": "#F5EAF8"},
@@ -89,7 +90,9 @@ def main() -> None:
     parser.add_argument("color", choices=sorted(COLORS))
     parser.add_argument("items", nargs="+", help=f"objects to show, in order. Known: {', '.join(sorted(ITEMS))}")
     parser.add_argument("--no-voice", action="store_true", help="render without narration")
-    parser.add_argument("--music", type=Path, help="optional background music file")
+    music = parser.add_mutually_exclusive_group()
+    music.add_argument("--music", type=Path, help="optional background music file")
+    music.add_argument("--theme-music", action="store_true", help="compose the Pip theme to fit this episode's length")
     parser.add_argument("--output", type=Path, help="output mp4 path")
     args = parser.parse_args()
 
@@ -130,6 +133,13 @@ def main() -> None:
     if args.music:
         shutil.copy(args.music, public_dir / f"music{args.music.suffix}")
         props["music"] = f"pip/{episode}/music{args.music.suffix}"
+    elif args.theme_music:
+        total_seconds = (outro["startFrame"] + outro["durationFrames"]) / FPS
+        subprocess.run(
+            [sys.executable, str(ROOT / "scripts" / "pip_music.py"), str(public_dir / "music.wav"), "--seconds", str(total_seconds)],
+            check=True,
+        )
+        props["music"] = f"pip/{episode}/music.wav"
 
     props_path = public_dir / "props.json"
     props_path.write_text(json.dumps(props, indent=2))

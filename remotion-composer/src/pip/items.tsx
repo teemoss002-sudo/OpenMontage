@@ -129,8 +129,9 @@ export const PIP_ITEMS: Record<string, ItemDrawing> = {
   ),
   banana: (color, dark) => (
     <>
-      <path d="M40 60 C40 130 100 172 166 150 C170 146 168 140 162 140 C110 148 66 118 58 62 Z" fill={color} stroke={dark} strokeWidth="5" strokeLinejoin="round" />
-      <path d="M40 60 L48 44 L58 62 Z" fill={BROWN} />
+      <path d="M36 58 C30 140 100 186 168 152 C174 146 170 138 162 138 C112 142 80 108 72 54 Z" fill={color} stroke={dark} strokeWidth="5" strokeLinejoin="round" />
+      <path d="M52 74 C56 124 96 156 148 150" stroke={dark} strokeWidth="4" strokeLinecap="round" fill="none" opacity="0.5" />
+      <path d="M38 60 L46 40 L68 44 L70 58 Z" fill={BROWN} />
       <path d="M162 140 L172 146 L166 150 Z" fill={BROWN} />
     </>
   ),

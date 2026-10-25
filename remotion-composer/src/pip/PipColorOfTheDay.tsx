@@ -35,6 +35,7 @@ export type PipColorOfTheDayProps = {
   dark: string;
   light: string;
   background: string;
+  labelText?: string;
   intro: PipSegment;
   items: PipColorItem[];
   outro: PipSegment & { text: string };
@@ -124,7 +125,7 @@ const Title: React.FC<Pick<PipColorOfTheDayProps, "colorName" | "color" | "dark"
   );
 };
 
-const Label: React.FC<{ text: string; color: string; appearFrame: number; hideFrame: number }> = ({ text, color, appearFrame, hideFrame }) => {
+const Label: React.FC<{ text: string; color: string; textColor: string; appearFrame: number; hideFrame: number }> = ({ text, color, textColor, appearFrame, hideFrame }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const show = spring({ frame: frame - appearFrame, fps, config: { damping: 10 } });
@@ -137,7 +138,7 @@ const Label: React.FC<{ text: string; color: string; appearFrame: number; hideFr
         style={{
           transform: `scale(${scale})`,
           background: color,
-          color: "#FFFFFF",
+          color: textColor,
           borderRadius: 36,
           padding: "10px 46px 18px",
           fontFamily,
@@ -194,7 +195,7 @@ const FlyingItem: React.FC<{ item: PipColorItem; index: number; count: number } 
 };
 
 export const PipColorOfTheDay: React.FC<PipColorOfTheDayProps> = (props) => {
-  const { colorName, color, dark, light, background, intro, items, outro, music, musicVolume = 0.45 } = props;
+  const { colorName, color, dark, light, background, labelText = "#FFFFFF", intro, items, outro, music, musicVolume = 0.45 } = props;
   const frame = useCurrentFrame();
   const segments: PipSegment[] = [intro, ...items, outro];
   const talking = segments.some((segment) => frame >= segment.startFrame && frame < segment.startFrame + segment.speechFrames);
@@ -208,9 +209,9 @@ export const PipColorOfTheDay: React.FC<PipColorOfTheDayProps> = (props) => {
         <FlyingItem key={index} item={item} index={index} count={items.length} color={color} dark={dark} light={light} />
       ))}
       {items.map((item, index) => (
-        <Label key={index} text={item.label} color={color} appearFrame={item.startFrame + 6} hideFrame={item.startFrame + item.durationFrames - MOVE_FRAMES} />
+        <Label key={index} text={item.label} color={color} textColor={labelText} appearFrame={item.startFrame + 6} hideFrame={item.startFrame + item.durationFrames - MOVE_FRAMES} />
       ))}
-      <Label text={outro.text} color={color} appearFrame={outro.startFrame} hideFrame={outro.startFrame + outro.durationFrames + 60} />
+      <Label text={outro.text} color={color} textColor={labelText} appearFrame={outro.startFrame} hideFrame={outro.startFrame + outro.durationFrames + 60} />
       <div style={{ position: "absolute", top: 1500, width: WIDTH, display: "flex", justifyContent: "center" }}>
         <Pip size={340} talking={talking} waving={waving} />
       </div>
