@@ -16,6 +16,11 @@ import { ProductReveal, ProductRevealProps } from "./components/ProductReveal";
 import { CaptionOverlay, WordCaption } from "./components/CaptionOverlay";
 import { CollageBurst, CollageBurstProps } from "./CollageBurst";
 import { LyricOverlay, LyricOverlayProps } from "./LyricOverlay";
+import {
+  PipColorOfTheDay,
+  PIP_COLOR_OF_THE_DAY_PREVIEW,
+  calculatePipColorOfTheDayMetadata,
+} from "./pip/PipColorOfTheDay";
 
 // ---------------------------------------------------------------------------
 // Theme System — prevents every video from looking like dark fintech
@@ -329,6 +334,16 @@ export const Root: React.FC = () => {
           fadeOutSeconds: 1.5,
           overlay: true,
         } as EndTagProps}
+      />
+      <Composition
+        id="PipColorOfTheDay"
+        component={PipColorOfTheDay}
+        durationInFrames={390}
+        fps={30}
+        width={1080}
+        height={1920}
+        defaultProps={PIP_COLOR_OF_THE_DAY_PREVIEW}
+        calculateMetadata={calculatePipColorOfTheDayMetadata}
       />
     </>
   );
